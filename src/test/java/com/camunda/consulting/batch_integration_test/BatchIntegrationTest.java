@@ -1,8 +1,10 @@
 package com.camunda.consulting.batch_integration_test;
 
 import static org.assertj.core.api.Assertions.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Map;
+import org.awaitility.Awaitility;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.batch.Batch;
 import org.camunda.bpm.engine.batch.history.HistoricBatch;
@@ -44,13 +46,13 @@ public class BatchIntegrationTest {
     LOG.info("Completed User task {}", lastTaskId);
     
     // expectation: The batch will fail and show some errors. 
-    
-    Thread.sleep(5000);
-    
-    HistoricBatch historicBatch = engine.getHistoryService().createHistoricBatchQuery().batchId(batch.getId()).singleResult();
-    LOG.info("Historic Batch: {}", historicBatch);
-    LOG.info("Historic Batch Jobs: {}", engine.getHistoryService().createHistoricJobLogQuery().jobDefinitionId(batch.getBatchJobDefinitionId()).count());
-    assertThat(historicBatch.getEndTime()).describedAs("Batch is not ended").isNotNull();
+    Awaitility.await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
+      Thread.sleep(500);
+      HistoricBatch historicBatch = engine.getHistoryService().createHistoricBatchQuery().batchId(batch.getId()).singleResult();
+      LOG.info("Historic Batch: {}", historicBatch);
+      LOG.info("Historic Batch Jobs: {}", engine.getHistoryService().createHistoricJobLogQuery().jobDefinitionId(batch.getBatchJobDefinitionId()).count());
+      assertThat(historicBatch.getEndTime()).describedAs("Batch is not ended").isNotNull();
+    });    
   }
   
 }
