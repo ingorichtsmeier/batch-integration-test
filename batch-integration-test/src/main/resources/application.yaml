@@ -1,0 +1,37 @@
+spring.datasource:
+  url: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#shareable h2 database: jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+  username: sa
+  password: sa
+spring.h2.console.enabled: true
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+    firstName: Demo
+    lastName: Demo
+  filter:
+    create: All Tasks
+camunda:   
+  bpm:
+    generic-properties:
+      properties:
+        failed-job-retry-time-cycle: R1/PT30S
+#        historyRemovalTimeStrategy: start
+#        job-executor-acquire-by-due-date: true
+#        job-executor-acquire-by-duedate: true
+#        job-executor-acquire-by-dueDate: true
+#        jobExecutorAcquireByDueDate: true
+#    job-executor-acquire-by-due-date: true
+    authorization:
+      enabled: true
+        
+#  default-serialization-format: application/json
+server.port: 8080
+
+logging:
+  level:
+#    "[org.camunda.bpm.engine.jobexecutor]": INFO
+#    '[org.camunda.bpm.engine.impl.persistence.entity.JobEntity]': INFO
+    org.camunda.bpm.engine.impl.persistence.entity: INFO
+    org.camunda.bpm.engine.cmd: DEBUG
